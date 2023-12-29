@@ -14,6 +14,8 @@ https://github.com/jjwbruijn/OpenEPaperLink/wiki
 
 ### Nordpool or any Other Input as Charts on Epaper Displays
 
+![Chart examples](nordpools.jpg)
+
 These examples don't need the Epaper integration to be installed, they are pushing images directly to the Epaper access point. 
 
 - [epaper_big_display.py](addon_configs/appdaemon/apps/epaper_big_display.py), renders an image from sensor data to a 400x300 ink display
