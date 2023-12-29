@@ -15,6 +15,7 @@ https://github.com/jjwbruijn/OpenEPaperLink/wiki
 ### Nordpool or any Other Input as Charts on Epaper Displays
 
 ![Chart examples](nordpools.jpg)
+![Chart examples](nordpools_1.jpg)
 
 These examples don't need the Epaper integration to be installed, they are pushing images directly to the Epaper access point. 
 
