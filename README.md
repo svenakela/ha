@@ -42,6 +42,12 @@ Your AppDaemon instance needs following extra dependencies:
 
 You need the config in the [apps.yaml](addon_configs/appdaemon/apps/apps.yaml) file and the two TTF font files. They should all be placed in the `apps` folder of your Appdaemon setup. Change the config in the head of the classes to match your AP and display MAC.
 
+In the top of the class you want to use, you need to adjust these settings to match your own setup:
+
+    AP_IP = '192.168.3.130'
+    MAC = '000002B3353A3413'
+    SENSOR = 'sensor.nordpool_kwh_se3_sek_3_10_025'
+
 If you want to manually trigger a re-render, it is easily made with a script in HA that can be executed in the Developer tools Events sections. Add this to `scripts.yaml`:
 
     alias: Generate small chart to epaper display
