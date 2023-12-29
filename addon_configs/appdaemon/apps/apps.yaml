@@ -1,0 +1,8 @@
+---
+epaper_big_chart:
+  module: epaper_big_display
+  class: BigDisplayChart
+
+epaper_small_chart:
+  module: epaper_small_display
+  class: SmallDisplayChart
