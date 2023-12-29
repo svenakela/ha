@@ -60,4 +60,6 @@ If you want to manually trigger a re-render, it is easily made with a script in 
 
 Reload the scripts and then the events can be fired in the Events section.
 
-Please note that the epaper AP is not fast and don't like parallel posts! Make sure to run updates in sequence and not in parallel.
+Please note that the epaper AP is not fast and don't like parallel posts! Make sure to run updates in sequence and not in parallel to avoid corrupt images.
+
+The two classes initialize an hourly update but with a small difference in scheduled time to not interfere with each other. With this small time difference the AP has time to load the images in a safe manner.
