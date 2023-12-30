@@ -112,7 +112,7 @@ class SmallDisplayChart(Hass):
         draw.text((IMG_WIDTH-36, IMG_HEIGHT-12), f'{datetime.now().strftime("%H:%M")}', font=FONT_UPD, fill=1)
 
         rgb_image = image.convert('RGB')
-        image_path = 'display.jpg'
+        image_path = 'display_small.jpg'
         rgb_image.save(image_path, 'JPEG', quality="maximum")
 
         url = "http://" + AP_IP + "/imgupload"

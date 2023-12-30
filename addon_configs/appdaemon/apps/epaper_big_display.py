@@ -109,7 +109,7 @@ class BigDisplayChart(Hass):
         draw.text((250, IMG_HEIGHT-16), f'{datetime.now().strftime("%y-%m-%d %H.%M")}', font=FONT_UPD, fill=1)
 
         rgb_image = image.convert('RGB')
-        image_path = 'display.jpg'
+        image_path = 'display_big.jpg'
         rgb_image.save(image_path, 'JPEG', quality="maximum")
 
         url = "http://" + AP_IP + "/imgupload"
