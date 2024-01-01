@@ -145,7 +145,3 @@ blueprint:
         {# The devil is in the details. Are we on 666 we do have an error #}
         {{ [prio|int if prio != 666 else limit|int, 0]|max }}
   mode: single
-- id: '1701187835766'
-  alias: Laddnotifiering till mobil
-  description: "Mess till mobilen när laddningen är avslutad"
-  mode: single
