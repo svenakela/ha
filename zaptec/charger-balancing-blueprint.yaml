@@ -1,6 +1,6 @@
 blueprint:
   name: EV Charger Balancing
-  description: Load balancing (current limiting) a single Zaptec charger.
+  description: Load balancing (current limiting) a single Zaptec charger. Read all the details at https://github.com/svenakela/ha/blob/main/zaptec/README.md
   domain: automation
   author: https://github.com/svenakela
 
