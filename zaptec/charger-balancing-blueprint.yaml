@@ -55,93 +55,91 @@ blueprint:
           min: 12
           max: 25
           unit_of_measurement: "A"
-  variables:
-    main_current_l1: !input main_current_l1
-    main_current_l2: !input main_current_l2
-    main_current_l3: !input main_current_l3
-    charger_uuid: !input charger_uuid
-    _main_fuse: !input _main_fuse
-    _charger_fuse: !input _charger_fuse
-  trigger:
-  - platform: time_pattern
-    minutes: /1
-  - platform: numeric_state
-    entity_id:
-      - main_current_l1
-    above: 20
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 15
-  - platform: numeric_state
-    entity_id:
-      - main_current_l2
-    above: 20
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 15
-  - platform: numeric_state
-    entity_id:
-      - main_current_l3
-    above: 20
-    for:
-      hours: 0
-      minutes: 0
-      seconds: 15
-  condition:
-  - condition: template
-    value_template: '{{ now() - state_attr(this.entity_id, ''last_triggered'') > timedelta(seconds=10) }}'
-  action:
-  - service: zaptec.limit_current
-    data:
-      device_id: 840f38f201d741d9d5a4794245167b69
-      available_current: >-
-        {% set main_fuse       = _main_fuse|float(0.0) %}
-        {% set charger_fuse    = _charger_fuse|float(0.0) %}
-        {% set safe_buffer     =  2|float(0.0) %}
-        {% set min_start_limit =  6|int %}
-        {% set main_safe_level = main_fuse - safe_buffer %}
-        {% set charger_safe_level = charger_fuse - safe_buffer %}
-        {% set charger_state = states('sensor.min_zaptecladdare_charger_mode') %}
-        {% set charger_limit = states('number.solhemsvagen_5a_available_current')|float(0) %}
-        {% set current = [states('sensor.p1ib_current_l1'),
-                          states('sensor.p1ib_current_l2'),
-                          states('sensor.p1ib_current_l3')]|max|float(0) %}
-        {% set updated_on = as_datetime(state_attr('binary_sensor.solhemsvagen_5a_installation', 'updated_on')) %}
-        {% set updates_ok = utcnow().replace(tzinfo=None) - updated_on > timedelta(minutes=5) %}
-
-        {% set limit = charger_limit %}
-        {% set prio = 666 %}
-        
-        {# Priority limiting #}
-        {% if charger_state == 'Charging' %}
-          {# Are we about to blow a fuse? #}
-          {% if current > main_fuse or charger_limit > charger_fuse %}
-            {% set main_max = (charger_limit - (current - main_fuse))|int %}
-            {% set my_max = (charger_limit - (charger_limit - charger_fuse))|int %}
-            {# Stay above 6 A or stop charging #}
-            {% set prio = 0|int if main_max < min_start_limit 
-                or my_max < min_start_limit else [main_max, my_max]|min %}
-          {% endif %}
+variables:
+  main_current_l1: !input main_current_l1
+  main_current_l2: !input main_current_l2
+  main_current_l3: !input main_current_l3
+  charger_uuid: !input charger_uuid
+  _main_fuse: !input _main_fuse
+  _charger_fuse: !input _charger_fuse
+trigger:
+- platform: time_pattern
+  minutes: /1
+- platform: numeric_state
+  entity_id:
+    - main_current_l1
+  above: 20
+  for:
+    hours: 0
+    minutes: 0
+    seconds: 15
+- platform: numeric_state
+  entity_id:
+    - main_current_l2
+  above: 20
+  for:
+    hours: 0
+    minutes: 0
+    seconds: 15
+- platform: numeric_state
+  entity_id:
+    - main_current_l3
+  above: 20
+  for:
+    hours: 0
+    minutes: 0
+    seconds: 15
+condition:
+- condition: template
+  value_template: '{{ now() - state_attr(this.entity_id, ''last_triggered'') > timedelta(seconds=10) }}'
+action:
+- service: zaptec.limit_current
+  data:
+    device_id: 840f38f201d741d9d5a4794245167b69
+    available_current: >-
+      {% set main_fuse       = _main_fuse|float(0.0) %}
+      {% set charger_fuse    = _charger_fuse|float(0.0) %}
+      {% set safe_buffer     =  2|float(0.0) %}
+      {% set min_start_limit =  6|int %}
+      {% set main_safe_level = main_fuse - safe_buffer %}
+      {% set charger_safe_level = charger_fuse - safe_buffer %}
+      {% set charger_state = states('sensor.min_zaptecladdare_charger_mode') %}
+      {% set charger_limit = states('number.solhemsvagen_5a_available_current')|float(0) %}
+      {% set current = [states('sensor.p1ib_current_l1'),
+                        states('sensor.p1ib_current_l2'),
+                        states('sensor.p1ib_current_l3')]|max|float(0) %}
+      {% set updated_on = as_datetime(state_attr('binary_sensor.solhemsvagen_5a_installation', 'updated_on')) %}
+      {% set updates_ok = utcnow().replace(tzinfo=None) - updated_on > timedelta(minutes=5) %}
+      {% set limit = charger_limit %}
+      {% set prio = 666 %}
+      
+      {# Priority limiting #}
+      {% if charger_state == 'Charging' %}
+        {# Are we about to blow a fuse? #}
+        {% if current > main_fuse or charger_limit > charger_fuse %}
+          {% set main_max = (charger_limit - (current - main_fuse))|int %}
+          {% set my_max = (charger_limit - (charger_limit - charger_fuse))|int %}
+          {# Stay above 6 A or stop charging #}
+          {% set prio = 0|int if main_max < min_start_limit 
+              or my_max < min_start_limit else [main_max, my_max]|min %}
         {% endif %}
-        
-        {# Ordinary limiting #}
-        {% if (charger_state == 'Charging' and updates_ok)
-            or charger_state == 'Waiting' %}
-          {# Been zeroed and need to restart when main_fuse allows #}
-          {% set _max_pow = limit + (main_safe_level - current)|int %}
-          {% set _no_pow  = 0 if _max_pow < min_start_limit else 666 %}
-          {% set limit = [_no_pow, _max_pow, charger_safe_level]|min %}
-        {% endif %}
-        
-        {% if charger_state == 'Charge done' 
-           or charger_state == 'Disconnected' 
-           or charger_state == 'Unknown' %}
-          {# We are not charging, go to zero #}
-          {% set limit = 0 %}
-        {% endif %}
-
-        {# The devil is in the details. Are we on 666 we do have an error #}
-        {{ [prio|int if prio != 666 else limit|int, 0]|max }}
-  mode: single
+      {% endif %}
+      
+      {# Ordinary limiting #}
+      {% if (charger_state == 'Charging' and updates_ok)
+          or charger_state == 'Waiting' %}
+        {# Been zeroed and need to restart when main_fuse allows #}
+        {% set _max_pow = limit + (main_safe_level - current)|int %}
+        {% set _no_pow  = 0 if _max_pow < min_start_limit else 666 %}
+        {% set limit = [_no_pow, _max_pow, charger_safe_level]|min %}
+      {% endif %}
+      
+      {% if charger_state == 'Charge done' 
+         or charger_state == 'Disconnected' 
+         or charger_state == 'Unknown' %}
+        {# We are not charging, go to zero #}
+        {% set limit = 0 %}
+      {% endif %}
+      {# The devil is in the details. Are we on 666 we do have an error #}
+      {{ [prio|int if prio != 666 else limit|int, 0]|max }}
+mode: single
