@@ -48,7 +48,7 @@ blueprint:
           unit_of_measurement: "A"
     _charger_fuse:
       name: Charger Fuse Limit
-      description: Set the max current for the charger fuse
+      description: Set the max current for the charger fuse. MUST be lower than the main fuse.
       default: 16
       selector:
         number:
