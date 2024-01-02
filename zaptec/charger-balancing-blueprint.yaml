@@ -89,22 +89,22 @@ trigger:
 - platform: time_pattern
   minutes: /1
 - platform: numeric_state
-  entity_id: _main_current_l1
-  above: _main_fuse
+  entity_id: !input input_main_current_l1
+  above: !input input_main_fuse
   for:
     hours: 0
     minutes: 0
     seconds: 15
 - platform: numeric_state
-  entity_id: _main_current_l2
-  above: _main_fuse
+  entity_id: !input input_main_current_l2
+  above: !input input_main_fuse
   for:
     hours: 0
     minutes: 0
     seconds: 15
 - platform: numeric_state
-  entity_id: _main_current_l3
-  above: _main_fuse
+  entity_id: !input input_main_current_l3
+  above: !input input_main_fuse
   for:
     hours: 0
     minutes: 0
