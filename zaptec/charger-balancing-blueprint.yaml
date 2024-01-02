@@ -31,7 +31,7 @@ blueprint:
             - device_class: energy
     _main_fuse:
       name: Main Fuse Limit
-      description: Set the max current draw on your main fuse
+      description: Set the max current draw on your main fuse. Read the details https://bit.ly/zaptec-main-fuse
       default: 20
       selector:
         number:
@@ -40,7 +40,7 @@ blueprint:
           unit_of_measurement: "A"
     _charger_fuse:
       name: Charger Fuse Limit  
-      description: Set the max current for the charger fuse. MUST be lower than the main fuse (or the automation will halt).
+      description: Set the max current for the charger fuse. MUST be lower than the main fuse (or the automation will halt). Read the details https://bit.ly/zaptec-fuse-limit
       default: 16
       selector:
         number:
@@ -49,12 +49,12 @@ blueprint:
           unit_of_measurement: "A"
     _safe_buffer:
       name: Current Limit Safe Buffer
-      description: This buffer is used to make the load balancing resiliant to changes close to max current. The default 2 is working well. <a href=https://github.com/svenakela/ha/blob/main/zaptec/README.md#safe-buffer>Read the details</a>
-      default: 16
+      description: Buffer making the balancing resiliant to changes close to max current. The default 2 works for almost all situations. Read the details http://bit.ly/zaptec-safe-buffer
+      default: 2
       selector:
         number:
-          min: 12
-          max: 25
+          min: 1
+          max: 4
           unit_of_measurement: "A"
 variables:
   _main_current_l1: !input _main_current_l1
