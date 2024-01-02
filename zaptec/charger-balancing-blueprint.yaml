@@ -90,7 +90,7 @@ trigger:
   minutes: /1
 - platform: numeric_state
   entity_id:
-    - '{{_main_current_l1}}'
+    - '{{device_id(_main_current_l1)}}'
   above: 20
   for:
     hours: 0
