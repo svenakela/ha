@@ -1,27 +1,27 @@
 blueprint:
   name: Zaptec EV Charger Balancing
   description: >
-  # Zaptec Installation Load Balancing
-
-  Automating 3 phase load balancing for a Zaptec EV home charger by monitoring your local HAN meter.
-
-  ## Requirements
-
-  Most important is, you need to understand what you are into before using this blueprint!
-
-  You need the Zaptec integration minimum version 0.7.0
-
-  You need a local HAN meter or similar power meter feed into your Home Assistant
-
-  ## How it works
-
-  The automation will monitor your current draw and compares it to your main fuse and charger fuse. The charger will be given as much current as possible without over charging fuses. 
-
-  While normal operation, the charger is held as high as possible. If there is a power spike, the charger is lowered to a safe level. If the charge current can not stay above 6 A the charger will be halted (according to standards). Charging limits will be raised when it can be done.
-
-  Important! Read all the details at https://bit.ly/zaptec-ha-load-balancing before use!
-
-  Version 2024-01-02
+    # Zaptec Installation Load Balancing
+  
+    Automating 3-phase load balancing for a Zaptec EV home charger by monitoring your local HAN meter.
+  
+    ## Requirements
+  
+    Most important is, you need to understand what you are into before using this blueprint!
+  
+    You need the Zaptec integration minimum version 0.7.0
+  
+    You need a local HAN meter or similar power meter feed into your Home Assistant
+  
+    ## How it works
+  
+    The automation will monitor your current draw and compares it to your main fuse and charger fuse. The charger will be given as much current as possible without over charging fuses. 
+  
+    While normal operation, the charger is held as high as possible. If there is a power spike, the charger is lowered to a safe level. If the charge current can not stay above 6 A the charger will be halted (according to standards). Charging limits will be raised when it can be done.
+  
+    Important! Read all the details at https://bit.ly/zaptec-ha-load-balancing before use!
+  
+    Version 2024-01-02
   domain: automation
   author: https://github.com/svenakela
   source_url: https://github.com/svenakela/ha/blob/main/zaptec/charger-balancing-blueprint.yaml
