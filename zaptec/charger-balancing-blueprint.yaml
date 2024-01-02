@@ -78,29 +78,33 @@ blueprint:
           min: 1
           max: 4
           unit_of_measurement: "A"
+variables: 
+  _main_current_l1: !input input_main_current_l1
+  _main_current_l2: !input input_main_current_l2
+  _main_current_l3: !input input_main_current_l3
+  _main_fuse: !input input_main_fuse
+  _charger_fuse: !input input_charger_fuse
+  _safe_buffer: !input input_safe_buffer
 trigger:
 - platform: time_pattern
   minutes: /1
 - platform: numeric_state
-  entity_id:
-    - !input input_main_current_l1
-  above: !input input_main_fuse
+  entity_id: _main_current_l1
+  above: _main_fuse
   for:
     hours: 0
     minutes: 0
     seconds: 15
 - platform: numeric_state
-  entity_id:
-    - !input input_main_current_l2
-  above: !input input_main_fuse
+  entity_id: _main_current_l2
+  above: _main_fuse
   for:
     hours: 0
     minutes: 0
     seconds: 15
 - platform: numeric_state
-  entity_id:
-    - !input input_main_current_l3
-  above: !input input_main_fuse
+  entity_id: _main_current_l3
+  above: _main_fuse
   for:
     hours: 0
     minutes: 0
@@ -110,12 +114,6 @@ condition:
   value_template: '{{ now() - state_attr(this.entity_id, ''last_triggered'') > timedelta(seconds=10) }}'
 action:
 - variables: 
-    _main_current_l1: !input input_main_current_l1
-    _main_current_l2: !input input_main_current_l2
-    _main_current_l3: !input input_main_current_l3
-    _main_fuse: !input input_main_fuse
-    _charger_fuse: !input input_charger_fuse
-    _safe_buffer: !input input_safe_buffer
     my_device_id: '{{ integration_entities(''zaptec'') | first | device_id }}'
     number_avail_curr: '{{ integration_entities(''zaptec'') | select(''match'', ''number.*available_current'') | first }}'
     sensor_charger_mode: '{{ integration_entities(''zaptec'') | select(''match'', ''sensor.*_charger_mode'') | first }}'
