@@ -27,7 +27,7 @@ blueprint:
   source_url: https://github.com/svenakela/ha/blob/main/zaptec/charger-balancing-blueprint.yaml
 
   input:
-    _main_current_l1:
+    input_main_current_l1:
       name: Current L1
       description: Current sensor for main line phase 1. This is something like current_l1 from a HAN meter.
       selector:
@@ -35,7 +35,7 @@ blueprint:
           filter:
             - domain: sensor
             - device_class: energy
-    _main_current_l2:
+    input_main_current_l2:
       name: Current L2
       description: Current sensor for main line phase 2. This is something like current_l2 from a HAN meter.
       selector:
@@ -43,7 +43,7 @@ blueprint:
           filter:
             - domain: sensor
             - device_class: energy
-    _main_current_l3:
+    input_main_current_l3:
       name: Current L3
       description: Current sensor for main line phase 3. This is something like current_l3 from a HAN meter.
       selector:
@@ -51,7 +51,7 @@ blueprint:
           filter:
             - domain: sensor
             - device_class: energy
-    _main_fuse:
+    input_main_fuse:
       name: Main Fuse Limit
       description: Set the max current draw on your main fuse. Read the details https://bit.ly/zaptec-main-fuse
       default: 20
@@ -60,7 +60,7 @@ blueprint:
           min: 16
           max: 32
           unit_of_measurement: "A"
-    _charger_fuse:
+    input_charger_fuse:
       name: Charger Fuse Limit  
       description: Set the max current for the charger fuse. MUST be lower than the main fuse (or the automation will halt). Read the details https://bit.ly/zaptec-fuse-limit
       default: 16
@@ -69,7 +69,7 @@ blueprint:
           min: 12
           max: 25
           unit_of_measurement: "A"
-    _safe_buffer:
+    input_safe_buffer:
       name: Current Limit Safe Buffer
       description: Buffer making the balancing resiliant to changes close to max current. The default 2 works for almost all situations. Read the details http://bit.ly/zaptec-safe-buffer
       default: 2
@@ -83,24 +83,24 @@ trigger:
   minutes: /1
 - platform: numeric_state
   entity_id:
-    - !input _main_current_l1
-  above: !input _main_fuse
+    - !input input_main_current_l1
+  above: !input input_main_fuse
   for:
     hours: 0
     minutes: 0
     seconds: 15
 - platform: numeric_state
   entity_id:
-    - !input _main_current_l2
-  above: !input _main_fuse
+    - !input input_main_current_l2
+  above: !input input_main_fuse
   for:
     hours: 0
     minutes: 0
     seconds: 15
 - platform: numeric_state
   entity_id:
-    - !input _main_current_l3
-  above: !input _main_fuse
+    - !input input_main_current_l3
+  above: !input input_main_fuse
   for:
     hours: 0
     minutes: 0
@@ -110,12 +110,12 @@ condition:
   value_template: '{{ now() - state_attr(this.entity_id, ''last_triggered'') > timedelta(seconds=10) }}'
 action:
 - variables: 
-    _main_current_l1: !input _main_current_l1
-    _main_current_l2: !input _main_current_l2
-    _main_current_l3: !input _main_current_l3
-    _main_fuse: !input _main_fuse
-    _charger_fuse: !input _charger_fuse
-    _safe_buffer: !input _safe_buffer
+    _main_current_l1: !input input_main_current_l1
+    _main_current_l2: !input input_main_current_l2
+    _main_current_l3: !input input_main_current_l3
+    _main_fuse: !input input_main_fuse
+    _charger_fuse: !input input_charger_fuse
+    _safe_buffer: !input input_safe_buffer
     my_device_id: '{{ integration_entities(''zaptec'') | first | device_id }}'
     number_avail_curr: '{{ integration_entities(''zaptec'') | select(''match'', ''number.*available_current'') | first }}'
     sensor_charger_mode: '{{ integration_entities(''zaptec'') | select(''match'', ''sensor.*_charger_mode'') | first }}'
