@@ -81,9 +81,6 @@ blueprint:
 trigger:
 - platform: time_pattern
   seconds: /20
-condition:
-- condition: template
-  value_template: '{{ now() - state_attr(this.entity_id, ''last_triggered'') > timedelta(seconds=10) }}'
 action:
 - variables:
     _main_current_l1: !input input_main_current_l1
