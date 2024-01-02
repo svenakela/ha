@@ -90,7 +90,7 @@ trigger:
   minutes: /1
 - platform: numeric_state
   entity_id:
-    - main_current_l1
+    - _main_current_l1
   above: 20
   for:
     hours: 0
@@ -98,7 +98,7 @@ trigger:
     seconds: 15
 - platform: numeric_state
   entity_id:
-    - main_current_l2
+    - _main_current_l2
   above: 20
   for:
     hours: 0
@@ -106,7 +106,7 @@ trigger:
     seconds: 15
 - platform: numeric_state
   entity_id:
-    - main_current_l3
+    - _main_current_l3
   above: 20
   for:
     hours: 0
