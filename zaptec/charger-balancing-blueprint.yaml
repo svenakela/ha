@@ -49,7 +49,7 @@ blueprint:
           unit_of_measurement: "A"
     _safe_buffer:
       name: Current Limit Safe Buffer
-      description: This buffer is used to make the load balancing resiliant to changes close to max current. The default 2 is working well. Read the details https://github.com/svenakela/ha/blob/main/zaptec/README.md#safe-buffer
+      description: This buffer is used to make the load balancing resiliant to changes close to max current. The default 2 is working well. <a href=https://github.com/svenakela/ha/blob/main/zaptec/README.md#safe-buffer>Read the details</a>
       default: 16
       selector:
         number:
