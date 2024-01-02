@@ -3,7 +3,7 @@ blueprint:
   description: >
     # Zaptec Installation Load Balancing
   
-    Automating 3-phase load balancing for a Zaptec EV home charger by monitoring your local HAN meter.
+    Automating 3 phase load balancing for a Zaptec EV home charger by monitoring your local HAN meter.
   
     ## Requirements
   
