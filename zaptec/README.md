@@ -36,6 +36,12 @@ Note: A 3-phase charger is _not_ capable of consuming different levels on the th
 
 ## Installation
 
+### One Click Install
+
+[![](https://my.home-assistant.io/badges/blueprint_import.svg)](https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/svenakela/ha/blob/main/zaptec/charger-balancing-blueprint.yaml)
+
+### Manual Install
+
 Copy the URL to the [charger-balancing-blueprint.yaml](https://github.com/svenakela/ha/blob/main/zaptec/charger-balancing-blueprint.yaml) file.
 
 Go to the _Settings -> Automations & scenes -> Blueprints_ tab in your Home Assistant, click the _Import Blueprint_ button and paste the URL.
