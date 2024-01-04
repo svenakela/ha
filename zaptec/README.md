@@ -50,6 +50,12 @@ When imported you can now create an automation by clicking the imported Blueprin
 
 ## Configuration
 
+### Current L1 L2 and L3
+
+These are the sensor inputs from the P1/HAN meter measuring the phase current. Make sure you have all three configured.
+
+For a Remne Tech device, the sensors are named `sensor.p1ib_current_l1` to `l3`.
+
 ### Main Fuse Limit
 
 `DEFAULT VALUE: 20 A`
