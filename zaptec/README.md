@@ -117,6 +117,8 @@ Here is a simple gauge for a Lovelace dashboard reading one of the phases from t
               - from: 16
                 color: '#FF5733'
 
+![](dashboard_gauge.jpg)
+
 If you want a quick release or adjust slider, useful during testing as a panic or enforce controller. By adjusting this slider the charger will be updated.
 
           - type: entities
