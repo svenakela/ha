@@ -7,6 +7,12 @@ Let's say you have a charger for your electric car, and want to maximise the out
 
 There are many chargers with a load balancer already included in the installation. But with Home Assistant and a smart meter your charger can be controlled totally by you and the load balancing can be fine adjusted.
 
+## Disclaimer
+
+Use this blueprint automation at your own risk. It is not written by nor endorsed by Zaptec the company. No author involved in this code will take responsibilty for any damages that may be caused by this code.
+
+On the other hand. You do have fuses. Right?..
+
 ## How Does it Work?
 
 The automation is constantly checking the state of the charger. As soon as the charger is requested to initialise a charging session the charger's limits are set as high as possible without risking to overload fuses.
@@ -76,6 +82,37 @@ Note that even though your charger is set to 16 A, it will not go higher than 15
 The main fuses can be bursted for a short while. Don't panic if that happens. The automation is even cool with that up to a 20 second period (it also takes a few seconds for the charger to react). If that happens too often though, or if the bursts are way over the limit, you probably have too much going on in your house grid. To decrease the risk of it happening you can lower the `Charger Fuse Limit` to a lower value than the real fuses. 
 
 If you have the possibility to shut off big consumers while charging, that is a good thing. For example if you can charge at night and at the same time turn off the water heating, the charger can operate freely without large concurrent consumers interfering.
+
+## Dashboarding my Charger
+
+Here is a simple gauge for a Lovelace dashboard reading one of the phases from the integration.
+
+          - type: gauge
+            entity: sensor.<the name of your charger>_current_phase_1
+            name: Zaptec
+            unit: A
+            min: 0
+            max: 16
+            segments:
+              - from: 0
+                color: '#2980B9'
+              - from: 6
+                color: '#48C9B0'
+              - from: 10
+                color: '#7DCEA0'
+              - from: 14
+                color: '#FFC300'
+              - from: 16
+                color: '#FF5733'
+
+If you want a quick release or adjust slider, useful during testing as a panic or enforce controller. By adjusting this slider the charger will be updated.
+
+          - type: entities
+            entities:
+              - entity: number.<your installation name, probably your address>_available_current
+                name: Limit
+                secondary_info: last-updated
+            title: Zaptec Begränsning
 
 ## Test cases
 
