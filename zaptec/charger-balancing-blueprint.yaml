@@ -21,7 +21,7 @@ blueprint:
   
     Important! Read all the details at https://bit.ly/zaptec-ha-load-balancing before use!
   
-    Version 2024-01-02
+    Version 2024-01-05
   domain: automation
   author: https://github.com/svenakela
   source_url: https://github.com/svenakela/ha/blob/main/zaptec/charger-balancing-blueprint.yaml
@@ -60,6 +60,15 @@ blueprint:
           min: 16
           max: 32
           unit_of_measurement: "A"
+    input_safe_buffer:
+      name: Current Limit Main Safe Buffer
+      description: Buffer making the balancing resiliant to changes close to max current. The default 2 works for almost all situations. Read the details http://bit.ly/zaptec-safe-buffer
+      default: 2
+      selector:
+        number:
+          min: 1
+          max: 5
+          unit_of_measurement: "A"
     input_charger_fuse:
       name: Charger Fuse Limit  
       description: Set the max current for the charger fuse. MUST be lower than the main fuse (or the automation will halt). Read the details https://bit.ly/zaptec-fuse-limit
@@ -69,14 +78,14 @@ blueprint:
           min: 12
           max: 25
           unit_of_measurement: "A"
-    input_safe_buffer:
-      name: Current Limit Safe Buffer
-      description: Buffer making the balancing resiliant to changes close to max current. The default 2 works for almost all situations. Read the details http://bit.ly/zaptec-safe-buffer
-      default: 2
+    input_charger_safe_buffer:
+      name: Current Limit Charger Safe Buffer
+      description: Safety buffer for the charger fuses. Increasing this value will lower the max limit for the charger (fuse-buffer). The default 1 works for almost all situations Read the details http://bit.ly/zaptec-safe-buffer
+      default: 1
       selector:
         number:
           min: 1
-          max: 4
+          max: 5
           unit_of_measurement: "A"
 trigger:
 - platform: time_pattern
@@ -89,6 +98,7 @@ action:
     _main_fuse: !input input_main_fuse
     _charger_fuse: !input input_charger_fuse
     _safe_buffer: !input input_safe_buffer 
+    _charger_safe_buffer: !input input_charger_safe_buffer
     my_device_id: '{{ integration_entities(''zaptec'') | first | device_id }}'
     number_avail_curr: '{{ integration_entities(''zaptec'') | select(''match'', ''number.*available_current'') | first }}'
     sensor_charger_mode: '{{ integration_entities(''zaptec'') | select(''match'', ''sensor.*_charger_mode'') | first }}'
@@ -99,10 +109,11 @@ action:
     available_current: >-
       {% set main_fuse       = _main_fuse|float(0.0) %}
       {% set charger_fuse    = _charger_fuse|float(0.0) %}
-      {% set safe_buffer     = _safe_buffer|float(0.0) %}
+      {% set safe_buffer     = _safe_buffer|float(2.0) %}
+      {% set charger_safe_buffer = _charger_safe_buffer|float(1.0) %}
       {% set min_start_limit = 6|int %}
       {% set main_safe_level = main_fuse - safe_buffer %}
-      {% set charger_safe_level = charger_fuse - safe_buffer %}
+      {% set charger_safe_level = charger_fuse - charger_safe_buffer %}
       {% set charger_state = states(sensor_charger_mode) %}
       {% set charger_limit = states(number_avail_curr)|float(0) %}
       {% set current = [states(_main_current_l1),

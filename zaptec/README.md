@@ -74,11 +74,15 @@ The charger has its own set of fuses and they are always of a lower value than t
 
 ### Safe Buffer
 
-`DEFAULT VALUE: 2 A`
+`DEFAULT VALUE: 2 A` for main fuse
+
+`DEFAULT VALUE: 1 A` for charger fuse
 
 AKA _Current Limit Safe Buffer_.
 
 The `Safe Buffer` sets how many ampere at the top of the fuse limits where the load balancing is "on hold" for adjustments. See it as a sensitive area where load balancing should be held strict.
+
+For the charger fuses, the safe buffer is a strict limiter. The charger will not get a higher limit than `charger fuse - charger buffer`.
 
 Current draw in a house is constantly changing and when the draw is within the safe buffer it is very easy to tip over to an over charge. While the household consumtion is within this range, the load balancing is bit extra careful.
 
