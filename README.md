@@ -1,5 +1,9 @@
 # Various Home Assistant Things
 
+## Zaptec Load Balancing
+
+The Zaptec logic is [documented here](zaptec/README.md).
+
 ## AppDaemon
 
 For real. Install Appdaemon and take the time to understand it. A fully working Py environment is so much better to work with than Yaml templating. In all aspects.
@@ -15,13 +19,20 @@ https://github.com/jjwbruijn/OpenEPaperLink/wiki
 ### Nordpool or any Other Input as Charts on Epaper Displays
 
 ![Chart examples](nordpools.jpg)
+
 ![Chart examples](nordpools_1.jpg)
+
+German river data:
+
+![Chart examples](wsv_koln.jpg)
 
 These examples don't need the Epaper integration to be installed, they are pushing images directly to the Epaper access point. 
 
 - [epaper_big_display.py](addon_configs/appdaemon/apps/epaper_big_display.py), renders an image from sensor data to a 400x300 ink display
 
 - [epaper_small_display.py](addon_configs/appdaemon/apps/epaper_small_display.py), renders an image from sensor data to a 296x128 ink display
+
+- [epaper_small_display_wsv_wasser.py](addon_configs/appdaemon/apps/epaper_small_display.py), renders HISTORICAL DATA with a WSV Rest API call to a 296x128 display. It also optionally creates a sensor that can be used for normal operations inside HA
 
 #### Large Display Examples 
 ![Big Display example](display_.jpg)
@@ -32,7 +43,11 @@ These examples don't need the Epaper integration to be installed, they are pushi
 #### Small Display Example
 ![Small Display example](display.jpg)
 
-#### Setup
+German river water levels
+
+![Chart examples](display_small_wasser.jpg)
+
+#### Setup Nordpool
 
 Your AppDaemon instance needs following extra dependencies:
 
@@ -63,3 +78,18 @@ Reload the scripts and then the events can be fired in the Events section.
 Please note that the epaper AP is not fast and don't like parallel posts! Make sure to run updates in sequence and not in parallel to avoid corrupt images.
 
 The two classes initialize an hourly update but with a small difference in scheduled time to not interfere with each other. With this small time difference the AP has time to load the images in a safe manner.
+
+#### Setup WSV Water Levels
+
+You need to set all the config values in the header of the `epaper_small_display_wsv_wasser.py` class. Default is Köln/Rhein and it will create a sensor in HA.
+
+Add this in `apps.yaml`:
+
+    epaper_small_chart_wsv_wasser:
+      module: epaper_small_display_wsv_wasser
+      class: SmallDisplayChartWsvWasser
+
+For manual triggering add a script that fires the event `EPAPER_GENERATE_CHART_WSV_WASSER`. See above or add it via the HA UI.
+
+If you let the class update HA with a sensor, the sensor is easily found as "Water Level".
+
