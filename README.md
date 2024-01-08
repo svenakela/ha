@@ -98,3 +98,5 @@ For manual triggering add a script that fires the event `EPAPER_GENERATE_CHART_W
 If you let the class update HA with a sensor, the sensor is easily found as "Water Level".
 
 The WSV display renders _historical_ data. The class fetches the measurements from a REST API and reduces the result from quarterly updates to hour updates (every fourth value). It also cuts everything under a "normal level" to make the chart more readable on high numbers.
+
+You can choose with changing the config `CHART_LATEST_TO_RIGHT` if the chart should be rendered from the left or right.
