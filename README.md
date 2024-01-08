@@ -47,7 +47,9 @@ German river water levels
 
 ![Chart examples](display_small_wasser.jpg)
 
-#### Setup Nordpool
+## Setup Nordpool
+
+You need to have the Nordpool integration installed.
 
 Your AppDaemon instance needs following extra dependencies:
 
@@ -79,7 +81,9 @@ Please note that the epaper AP is not fast and don't like parallel posts! Make s
 
 The two classes initialize an hourly update but with a small difference in scheduled time to not interfere with each other. With this small time difference the AP has time to load the images in a safe manner.
 
-#### Setup WSV Water Levels
+Nordpool displays fetch data from the Nordpool Integration and your specified Nordpool sensor. Data presented is future prices. The data presented is stored in an attribute of the sensor as raw value arrays (i.e. `[0.93, 1.01, 1.10, 1.15, 1.07]`) in 24 h cycles. If you want to customise a display that lists future data, these classes are your best choice.
+
+## Setup WSV Water Levels
 
 You need to set all the config values in the header of the `epaper_small_display_wsv_wasser.py` class. Default is Köln/Rhein and it will create a sensor in HA.
 
@@ -93,3 +97,4 @@ For manual triggering add a script that fires the event `EPAPER_GENERATE_CHART_W
 
 If you let the class update HA with a sensor, the sensor is easily found as "Water Level".
 
+The WSV display renders _historical_ data. The class fetches the measurements from a REST API and reduces the result from quarterly updates to hour updates (every fourth value). It also cuts everything under a "normal level" to make the chart more readable on high numbers.
