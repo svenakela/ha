@@ -9,7 +9,7 @@ blueprint:
   
     - Most important is, you need to understand what you are into before using this blueprint!
   
-    - You need the Zaptec integration minimum version 0.8.0
+    - You need the Zaptec integration minimum version 0.8.2
   
     - You need a local HAN meter or similar power meter feed into your Home Assistant
   
