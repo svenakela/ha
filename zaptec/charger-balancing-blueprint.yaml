@@ -99,15 +99,14 @@ action:
     _charger_fuse: !input input_charger_fuse
     _safe_buffer: !input input_safe_buffer 
     _charger_safe_buffer: !input input_charger_safe_buffer
+    my_device_id: '{{ integration_entities(''zaptec'') | first | device_id }}'
     number_avail_curr: '{{ integration_entities(''zaptec'') | select(''match'', ''number.*available_current'') | first }}'
     sensor_charger_mode: '{{ integration_entities(''zaptec'') | select(''match'', ''sensor.*_charger_mode'') | first }}'
     binary_sensor_installation: '{{ integration_entities(''zaptec'') | select(''match'', ''binary_sensor.*_installation'') | first }}'
-- service: number.set_value
-  metadata: {}
-  target:
-    entity_id: '{{ number_avail_curr }}'
+- service: zaptec.limit_current
   data:
-    value: >-
+    device_id: '{{ my_device_id }}'
+    available_current: >-
       {% set main_fuse       = _main_fuse|float(0.0) %}
       {% set charger_fuse    = _charger_fuse|float(0.0) %}
       {% set safe_buffer     = _safe_buffer|float(2.0) %}
