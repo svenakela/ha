@@ -9,7 +9,7 @@ blueprint:
   
     - Most important is, you need to understand what you are into before using this blueprint!
   
-    - You need the Zaptec integration minimum version 0.7.0
+    - You need the Zaptec integration minimum version 0.8.2
   
     - You need a local HAN meter or similar power meter feed into your Home Assistant
   
@@ -125,7 +125,7 @@ action:
       {% set prio = 666 %}
       
       {# Priority limiting #}
-      {% if charger_state == 'Charging' %}
+      {% if charger_state == 'connected_charging' %}
         {# Are we about to blow a fuse? #}
         {% if current > main_fuse or charger_limit > charger_fuse %}
           {% set main_max = (charger_limit - (current - main_fuse))|int %}
@@ -137,17 +137,17 @@ action:
       {% endif %}
       
       {# Ordinary limiting #}
-      {% if (charger_state == 'Charging' and updates_ok)
-          or charger_state == 'Waiting' %}
+      {% if (charger_state == 'connected_charging' and updates_ok)
+          or charger_state == 'connected_requesting' %}
         {# Been zeroed and need to restart when main_fuse allows #}
         {% set _max_pow = limit + (main_safe_level - current)|int %}
         {% set _no_pow  = 0 if _max_pow < min_start_limit else 666 %}
         {% set limit = [_no_pow, _max_pow, charger_safe_level]|min %}
       {% endif %}
       
-      {% if charger_state == 'Charge done' 
-         or charger_state == 'Disconnected' 
-         or charger_state == 'Unknown' %}
+      {% if charger_state == 'connected_finished' 
+         or charger_state == 'disconnected' 
+         or charger_state == 'unknown' %}
         {# We are not charging, go to zero #}
         {% set limit = 0 %}
       {% endif %}

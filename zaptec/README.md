@@ -29,7 +29,11 @@ Note: A 3-phase charger is _not_ capable of consuming different levels on the th
 
 - You need a Zaptec charger
 
-- You need the [Zaptec integration](https://github.com/custom-components/zaptec), minimum version 0.7.0
+- You need the [Zaptec integration](https://github.com/custom-components/zaptec), minimum version 0.8.2
+  - If your Zaptec integration is not set up with the default English entity names or you have manually edited your entity ids, you need to ensure the following entity ids are present (see [this issue](https://github.com/svenakela/ha/issues/9#issuecomment-2907885636) for further details):
+    - `number.<your_installation_device>_available_current`
+    - `binary_sensor.<your_installation_device>_installation`
+    - `sensor.<your_charger_device>_charger_mode`
 
 - You need a P1/HAN meter connected to your home assistant. Minimum pushing current (A) for each phase
   - Tested devices from [Remne](https://remne.tech/) and [Smart Gateways](https://smartgateways.nl/en/product/smart-meter-wifi-gateway/)
