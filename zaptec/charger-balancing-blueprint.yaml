@@ -75,8 +75,8 @@ blueprint:
       default: 16
       selector:
         number:
-          min: 12
-          max: 25
+          min: 6
+          max: 32
           unit_of_measurement: "A"
     input_charger_safe_buffer:
       name: Current Limit Charger Safe Buffer
